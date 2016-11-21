@@ -20,7 +20,7 @@ end
 
 def request_posts (offset)
   client = Tumblr::Client.new
-  client.posts('oliverbone.com', :offset => offset)
+  client.posts(ENV['TUMBLR_URL'], :offset => offset)
 end
 
 # initial request
