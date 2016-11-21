@@ -2,6 +2,7 @@ require 'dotenv'
 require 'tumblr_client'
 require 'json'
 require 'pry'
+require 'open-uri'
 
 Dotenv.load
 
@@ -38,6 +39,13 @@ end
 # set posts to process
 @posts = @posts_whole['posts']
 
+def download_photo (url)
+  filename = url.split('/')[4]
+  File.open("data/images/#{filename}", 'wb') do |f|
+    f.write open(url).read
+  end
+end
+
 def process_posts (posts)
   posts.each do |post|
     timestamp = post['timestamp']
@@ -48,6 +56,7 @@ def process_posts (posts)
     if post_type == 'photo'
       post['photos'].each do |photo, index|
         photos_array.push(photo['original_size'])
+        download_photo(photo['original_size']['url'])
       end
     end
 
