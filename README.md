@@ -13,7 +13,7 @@ Within locally cloned repo:
 
 ## Next Steps
 
-[x] download images locally
-* format posts photo urls to match local photo filenames
-* prevent posts from being re-read each usage
-* handle video/non-photo posts
+- [x] download images locally
+- [ ] format posts photo urls to match local photo filenames
+- [ ] prevent posts from being re-read each usage
+- [ ] handle video/non-photo posts
