@@ -4,6 +4,13 @@ My wife and I share a blog on Tumblr to share photos of our son with friends and
 
 As a V1, key post data is being written to `data/posts.json`.
 
+## Usage
+
+Within locally cloned repo:
+
+1. `bundle install`
+2. `ruby tumblr.rb`
+
 ## Next Steps
 
 * download images locally
