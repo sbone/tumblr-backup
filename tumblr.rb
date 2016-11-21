@@ -32,6 +32,9 @@ end
 # track progress
 @saved_posts_count = 0
 
+# tumblr limits responses to 20 posts
+@tumblr_response_limit = 20
+
 # set posts to process
 @posts = @posts_whole['posts']
 
@@ -57,8 +60,8 @@ def process_posts (posts)
     @saved_posts_count += 1
     puts @saved_posts_count
 
-    if @saved_posts_count == @posts_offset + 20
-      @posts_offset += 20
+    if @saved_posts_count == @posts_offset + @tumblr_response_limit
+      @posts_offset += @tumblr_response_limit
       request_next_page(@posts_offset)
     elsif @saved_posts_count == @total_posts_count
       posts_to_json(@postsHash)
