@@ -39,17 +39,17 @@ end
 # set posts to process
 @posts = @posts_whole['posts']
 
-# 30s timeout for photo downloads
+# timeout (in seconds) for photo downloads
 @request_timeout = 60
 
-def download_photo (url)
+def download_photo(url)
   filename = url.split('/')[4]
   File.open("data/images/#{filename}", 'wb') do |f|
     f.write open(url, :read_timeout => @request_timeout).read
   end
 end
 
-def process_posts (posts)
+def process_posts(posts)
   posts.each do |post|
     timestamp = post['timestamp']
     caption = post['caption']
@@ -84,12 +84,12 @@ def process_posts (posts)
 
 end
 
-def request_next_page (offset)
+def request_next_page(offset)
   @next_page = request_posts(offset)
   process_posts(@next_page['posts'])
 end
 
-def posts_to_json (hash)
+def posts_to_json(hash)
   File.open('data/posts.json', 'w') do |f|
     f.write(JSON.pretty_generate(hash))
   end
