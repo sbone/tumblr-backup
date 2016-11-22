@@ -39,10 +39,13 @@ end
 # set posts to process
 @posts = @posts_whole['posts']
 
+# 30s timeout for photo downloads
+@request_timeout = 60
+
 def download_photo (url)
   filename = url.split('/')[4]
   File.open("data/images/#{filename}", 'wb') do |f|
-    f.write open(url).read
+    f.write open(url, :read_timeout => @request_timeout).read
   end
 end
 
