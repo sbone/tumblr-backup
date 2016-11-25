@@ -13,6 +13,9 @@ Tumblr.configure do |config|
   config.oauth_token_secret = ENV['OAUTH_TOKEN_SECRET']
 end
 
+# disable downloads
+@disable_downloads = true
+
 # the hash to be saved into JSON file
 @postsHash = {}
 
@@ -59,7 +62,9 @@ def process_posts(posts)
     if post_type == 'photo'
       post['photos'].each do |photo, index|
         photos_array.push(photo['original_size'])
-        download_photo(photo['original_size']['url'])
+        if !@disable_downloads
+          download_photo(photo['original_size']['url'])
+        end
       end
     end
 
