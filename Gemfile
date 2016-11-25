@@ -5,6 +5,5 @@ gem 'tumblr_client'
 gem 'json'
 gem 'pry'
 gem 'ruby-progressbar'
-
-
+gem 'whirly'
 

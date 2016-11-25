@@ -4,6 +4,7 @@ require 'json'
 require 'pry'
 require 'open-uri'
 require 'ruby-progressbar'
+require 'whirly'
 
 Dotenv.load
 
@@ -35,7 +36,11 @@ end
 @total_posts_count = @posts_whole['total_posts']
 
 # setup progressbar!
-@progressbar = ProgressBar.create(:title => "Posts Backed Up", :total => @total_posts_count, :format => '%a |%b%i| %p%% (%c) %t')
+@progressbar = ProgressBar.create(
+  :title => "Posts Backed Up",
+  :total => @total_posts_count,
+  :format => '  %p%% (%c/%C) %t'
+)
 
 # track progress
 @saved_posts_count = 0
@@ -118,6 +123,7 @@ def process_posts(posts)
       @posts_offset += @tumblr_response_limit
       request_next_page(@posts_offset)
     elsif @saved_posts_count == @total_posts_count
+      Whirly.stop
       posts_to_json(@postsHash)
       return
     end
@@ -137,5 +143,6 @@ def posts_to_json(hash)
 end
 
 # Let's begin!
+Whirly.start(:spinner => 'pencil')
 process_posts(@posts)
 

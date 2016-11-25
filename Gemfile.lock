@@ -28,6 +28,9 @@ GEM
       mime-types
       oauth
       simple_oauth
+    unicode-display_width (1.1.1)
+    whirly (0.2.4)
+      unicode-display_width (~> 1.1)
 
 PLATFORMS
   ruby
@@ -38,6 +41,7 @@ DEPENDENCIES
   pry
   ruby-progressbar
   tumblr_client
+  whirly
 
 BUNDLED WITH
    1.13.6
