@@ -77,7 +77,9 @@ def process_video(post)
     video_url = post['permalink_url']
   else
     video_url = post['video_url']
-    download_video(video_url)
+    if !@disable_downloads
+      download_video(video_url)
+    end
   end
 
   video_url
