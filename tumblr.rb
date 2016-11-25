@@ -3,6 +3,7 @@ require 'tumblr_client'
 require 'json'
 require 'pry'
 require 'open-uri'
+require 'ruby-progressbar'
 
 Dotenv.load
 
@@ -32,6 +33,9 @@ end
 
 # save total post count
 @total_posts_count = @posts_whole['total_posts']
+
+# setup progressbar!
+@progressbar = ProgressBar.create(:title => "Posts Backed Up", :total => @total_posts_count, :format => '%a |%b%i| %p%% (%c) %t')
 
 # track progress
 @saved_posts_count = 0
@@ -107,14 +111,14 @@ def process_posts(posts)
     end
 
     @saved_posts_count += 1
-    puts @saved_posts_count
+
+    @progressbar.increment
 
     if @saved_posts_count == @posts_offset + @tumblr_response_limit
       @posts_offset += @tumblr_response_limit
       request_next_page(@posts_offset)
     elsif @saved_posts_count == @total_posts_count
       posts_to_json(@postsHash)
-      puts 'Done!'
       return
     end
   end
