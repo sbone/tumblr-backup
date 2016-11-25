@@ -90,10 +90,11 @@ def process_posts(posts)
 
     if post_type == 'photo'
       @postsHash[post['id']]['photos'] = process_photos(post['photos'])
-    end
-
-    if post_type == 'video'
+    elsif post_type == 'video'
+      # save video type - 'embed' or 'file'?
       @postsHash[post['id']]['video'] = process_video(post)
+    elsif post_type == 'chat'
+      @postsHash[post['id']]['dialogue'] = post['dialogue']
     end
 
     @saved_posts_count += 1
