@@ -52,6 +52,13 @@ def download_photo(url)
   end
 end
 
+def download_video(url)
+  filename = url.split('/')[3]
+  File.open("data/videos/#{filename}", 'wb') do |f|
+    f.write open(url, :read_timeout => @request_timeout).read
+  end
+end
+
 def process_photos(photos)
   photos_array = []
   photos.each do |photo, index|
@@ -70,7 +77,7 @@ def process_video(post)
     video_url = post['permalink_url']
   else
     video_url = post['video_url']
-    # download video
+    download_video(video_url)
   end
 
   video_url
