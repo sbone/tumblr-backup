@@ -62,6 +62,17 @@ def process_photos(photos)
   end
 end
 
+def process_video(post)
+  @video_url = ''
+  if post['video_url'].nil?
+    @video_url = post['permalink_url']
+  else
+    @video_url = post['video_url']
+    # download video
+  end
+  # add @video_url to posts date
+end
+
 def process_posts(posts)
   posts.each do |post|
     timestamp = post['timestamp']
@@ -71,6 +82,10 @@ def process_posts(posts)
 
     if post_type == 'photo'
       process_photos(post['photos'])
+    end
+
+    if post_type == 'video'
+      process_video(post)
     end
 
     @postsHash[post['id']] = {
