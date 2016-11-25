@@ -52,27 +52,32 @@ def download_photo(url)
   end
 end
 
+def process_photos(photos)
+  photos.each do |photo, index|
+    puts photos
+    @photos_array.push(photo['original_size'])
+    if !@disable_downloads
+      download_photo(photo['original_size']['url'])
+    end
+  end
+end
+
 def process_posts(posts)
   posts.each do |post|
     timestamp = post['timestamp']
     caption = post['caption']
     post_type = post['type']
-    photos_array = []
+    @photos_array = []
 
     if post_type == 'photo'
-      post['photos'].each do |photo, index|
-        photos_array.push(photo['original_size'])
-        if !@disable_downloads
-          download_photo(photo['original_size']['url'])
-        end
-      end
+      process_photos(post['photos'])
     end
 
     @postsHash[post['id']] = {
       'timestamp': timestamp,
       'type': post_type,
       'caption': caption,
-      'photos': photos_array
+      'photos': @photos_array
     }
     @saved_posts_count += 1
     puts @saved_posts_count
