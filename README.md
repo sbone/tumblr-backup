@@ -8,8 +8,19 @@ As a V1, key post data is being written to `data/posts.json`.
 
 Within locally cloned repo:
 
+1. `touch .env`
+1. populate `.env`: 
+ 
+	```
+	CONSUMER_KEY='{your-consumer-key}'
+	CONSUMER_SECRET='{your-consumer-secret}'
+	OAUTH_TOKEN='{your-oauth-token}'
+	OAUTH_TOKEN_SECRET='{your-token-secret}'
+	TUMBLR_URL='{your-tumblr-url}'
+	```
+
 1. `bundle install`
-2. `ruby tumblr.rb`
+1. `ruby tumblr.rb`
 
 ## Next Steps
 
