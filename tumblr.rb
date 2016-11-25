@@ -53,24 +53,27 @@ def download_photo(url)
 end
 
 def process_photos(photos)
+  photos_array = []
   photos.each do |photo, index|
-    puts photos
-    @photos_array.push(photo['original_size'])
+    photos_array.push(photo['original_size'])
     if !@disable_downloads
       download_photo(photo['original_size']['url'])
     end
   end
+
+  photos_array
 end
 
 def process_video(post)
-  @video_url = ''
+  video_url = ''
   if post['video_url'].nil?
-    @video_url = post['permalink_url']
+    video_url = post['permalink_url']
   else
-    @video_url = post['video_url']
+    video_url = post['video_url']
     # download video
   end
-  # add @video_url to posts date
+
+  video_url
 end
 
 def process_posts(posts)
@@ -78,22 +81,21 @@ def process_posts(posts)
     timestamp = post['timestamp']
     caption = post['caption']
     post_type = post['type']
-    @photos_array = []
-
-    if post_type == 'photo'
-      process_photos(post['photos'])
-    end
-
-    if post_type == 'video'
-      process_video(post)
-    end
 
     @postsHash[post['id']] = {
       'timestamp': timestamp,
       'type': post_type,
-      'caption': caption,
-      'photos': @photos_array
+      'caption': caption
     }
+
+    if post_type == 'photo'
+      @postsHash[post['id']]['photos'] = process_photos(post['photos'])
+    end
+
+    if post_type == 'video'
+      @postsHash[post['id']]['video'] = process_video(post)
+    end
+
     @saved_posts_count += 1
     puts @saved_posts_count
 
