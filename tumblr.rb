@@ -68,13 +68,19 @@ def download_video(url)
   end
 end
 
+def extract_filename(photo_url)
+  filename_regex = /[^\/]*$/
+  filename_regex.match(photo_url)
+end
+
 def process_photos(photos)
   photos_array = []
   photos.each do |photo, index|
-    photos_array.push(photo['original_size'])
     if !@disable_downloads
       download_photo(photo['original_size']['url'])
     end
+    photo['original_size']['url'] = extract_filename(photo['original_size']['url'])
+    photos_array.push(photo['original_size'])
   end
 
   photos_array
