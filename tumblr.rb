@@ -16,7 +16,7 @@ Tumblr.configure do |config|
 end
 
 # disable downloads
-@disable_downloads = true
+@disable_downloads = ENV['DISABLE_DOWNLOADS']
 
 # the hash to be saved into JSON file
 @postsHash = {}
