@@ -1,3 +1,6 @@
 .env
 posts.json
-data/images/*
+data/images/*.jpg
+data/images/*.gif
+data/images/*.png
+data/videos/*.mp4
