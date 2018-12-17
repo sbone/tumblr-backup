@@ -24,9 +24,9 @@ end
 # offset count for pagination
 @posts_offset = 0
 
-def request_posts (offset)
+def request_posts(offset)
   client = Tumblr::Client.new
-  client.posts(ENV['TUMBLR_URL'], :offset => offset)
+  client.posts(ENV['TUMBLR_URL'], offset: offset)
 end
 
 # initial request
@@ -37,9 +37,9 @@ end
 
 # setup progressbar!
 @progressbar = ProgressBar.create(
-  :title => "Posts Backed Up",
-  :total => @total_posts_count,
-  :format => '  %p%% (%c/%C) %t'
+  title: 'Posts Backed Up',
+  total: @total_posts_count,
+  format: '  %p%% (%c/%C) %t'
 )
 
 # track progress
@@ -57,25 +57,25 @@ end
 def download_photo(url)
   filename = url.split('/')[4]
   File.open("data/images/#{filename}", 'wb') do |f|
-    f.write open(url, :read_timeout => @request_timeout).read
+    f.write open(url, read_timeout: @request_timeout).read
   end
 end
 
 def download_video(url)
   filename = url.split('/')[3]
   File.open("data/videos/#{filename}", 'wb') do |f|
-    f.write open(url, :read_timeout => @request_timeout).read
+    f.write open(url, read_timeout: @request_timeout).read
   end
 end
 
 def extract_filename(photo_url)
-  filename_regex = /[^\/]*$/
+  filename_regex = %r{/[^/]*$/}
   filename_regex.match(photo_url)
 end
 
 def process_photos(photos)
   photos_array = []
-  photos.each do |photo, index|
+  photos.each do |photo|
     if !@disable_downloads
       download_photo(photo['original_size']['url'])
     end
@@ -149,6 +149,6 @@ def posts_to_json(hash)
 end
 
 # Let's begin!
-Whirly.start(:spinner => 'pencil')
+Whirly.start(spinner: 'pencil')
 process_posts(@posts)
 
