@@ -15,8 +15,7 @@ Tumblr.configure do |config|
   config.oauth_token_secret = ENV['OAUTH_TOKEN_SECRET']
 end
 
-# disable downloads
-@disable_downloads = ENV['DISABLE_DOWNLOADS']
+@downloads_enabled = ENV['DOWNLOADS_ENABLED']
 
 # the hash to be saved into JSON file
 @postsHash = {}
@@ -54,9 +53,11 @@ end
 # timeout (in seconds) for photo downloads
 @request_timeout = 60
 
-def download_photo(url)
-  filename = url.split('/')[4]
-  File.open("data/images/#{filename}", 'wb') do |f|
+def download_photo(url, filename)
+  # deconstruct request url path to get file extension
+  request_url_filename = url.split('/')[4].split('\.', -1)[0]
+  file_extension = request_url_filename.split(//).last(3).join('').to_s
+  File.open("data/images/#{filename}.#{file_extension}", 'wb') do |f|
     f.write open(url, read_timeout: @request_timeout).read
   end
 end
@@ -73,11 +74,12 @@ def extract_filename(photo_url)
   filename_regex.match(photo_url)
 end
 
-def process_photos(photos)
+def process_photos(post)
+  photos = post['photos']
   photos_array = []
   photos.each do |photo|
-    if !@disable_downloads
-      download_photo(photo['original_size']['url'])
+    if @downloads_enabled
+      download_photo(photo['original_size']['url'], Time.at(post['timestamp']))
     end
     photo['original_size']['url'] = extract_filename(photo['original_size']['url'])
     photos_array.push(photo['original_size'])
@@ -92,7 +94,7 @@ def process_video(post)
     video_url = post['permalink_url']
   else
     video_url = post['video_url']
-    if !@disable_downloads
+    if @downloads_enabled
       download_video(video_url)
     end
   end
@@ -113,7 +115,7 @@ def process_posts(posts)
     }
 
     if post_type == 'photo'
-      @postsHash[post['id']]['photos'] = process_photos(post['photos'])
+      @postsHash[post['id']]['photos'] = process_photos(post)
     elsif post_type == 'video'
       # save video type - 'embed' or 'file'?
       @postsHash[post['id']]['video'] = process_video(post)
