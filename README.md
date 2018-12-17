@@ -1,8 +1,9 @@
 # Tumblr Backup
 
-My wife and I share a blog on Tumblr to share photos of our son with friends and family. It's been an amazing platform, but I've felt remiss not having a local backup.
+Ruby script to backup a photo-and-video-centric Tumblog locally.
 
-As a V1, key post data is being written to `data/posts.json`.
+Post contents are saved in `/data/:media_type:/`
+Key post data is written to `/data/posts.json`
 
 ## Usage
 
@@ -18,3 +19,4 @@ Within locally cloned repo:
 - [x] format posts photo urls to match local photo filenames
 - [ ] prevent posts from being re-read each usage
 - [ ] handle video/non-photo posts
+- [ ] make filenames useful
