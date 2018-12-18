@@ -5,6 +5,7 @@ require 'pry'
 require 'open-uri'
 require 'ruby-progressbar'
 require 'whirly'
+require 'date'
 
 Dotenv.load
 
@@ -79,7 +80,8 @@ def process_photos(post)
   photos_array = []
   photos.each do |photo|
     if @downloads_enabled
-      download_photo(photo['original_size']['url'], Time.at(post['timestamp']))
+      pretty_timestamp = Time.at(post['timestamp']).strftime('%Y %b %e - %I:%M%p')
+      download_photo(photo['original_size']['url'], pretty_timestamp)
     end
     photo['original_size']['url'] = extract_filename(photo['original_size']['url'])
     photos_array.push(photo['original_size'])
@@ -151,6 +153,6 @@ def posts_to_json(hash)
 end
 
 # Let's begin!
-Whirly.start(spinner: 'pencil')
+# Whirly.start(spinner: 'pencil')
 process_posts(@posts)
 
