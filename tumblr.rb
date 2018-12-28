@@ -63,9 +63,10 @@ def download_photo(url, filename)
   end
 end
 
-def download_video(url)
-  filename = url.split('/')[3]
-  File.open("data/videos/#{filename}", 'wb') do |f|
+def download_video(url, filename)
+  request_url_filename = url.split('/')[3].split('\.', -1)[0]
+  file_extension = request_url_filename.split(//).last(3).join('').to_s
+  File.open("data/videos/#{filename}.#{file_extension}", 'wb') do |f|
     f.write open(url, read_timeout: @request_timeout).read
   end
 end
@@ -80,7 +81,7 @@ def process_photos(post)
   photos_array = []
   photos.each do |photo|
     if @downloads_enabled
-      pretty_timestamp = Time.at(post['timestamp']).strftime('%Y %b %e - %I:%M%p')
+      pretty_timestamp = Time.at(post['timestamp']).strftime('%Y-%m-%e | %k%M%p')
       download_photo(photo['original_size']['url'], pretty_timestamp)
     end
     photo['original_size']['url'] = extract_filename(photo['original_size']['url'])
@@ -97,7 +98,8 @@ def process_video(post)
   else
     video_url = post['video_url']
     if @downloads_enabled
-      download_video(video_url)
+      pretty_timestamp = Time.at(post['timestamp']).strftime('%Y-%m-%e | %k%M%p')
+      download_video(video_url, pretty_timestamp)
     end
   end
 
