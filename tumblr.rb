@@ -54,21 +54,26 @@ end
 # timeout (in seconds) for photo downloads
 @request_timeout = 60
 
-def download_photo(url, filename)
-  # deconstruct request url path to get file extension
-  request_url_filename = url.split('/')[4].split('\.', -1)[0]
-  file_extension = request_url_filename.split(//).last(3).join('').to_s
-  File.open("data/images/#{filename}.#{file_extension}", 'wb') do |f|
+def get_file_extension(filename)
+  filename.split(//).last(3).join('').to_s
+end
+
+def write_file(full_path)
+  File.open(full_path, 'wb') do |f|
     f.write open(url, read_timeout: @request_timeout).read
   end
 end
 
+def download_photo(url, filename)
+  request_url_filename = url.split('/')[4].split('\.', -1)[0]
+  file_extension = get_file_extension(request_url_filename)
+  write_file("data/images/#{filename}.#{file_extension}")
+end
+
 def download_video(url, filename)
   request_url_filename = url.split('/')[3].split('\.', -1)[0]
-  file_extension = request_url_filename.split(//).last(3).join('').to_s
-  File.open("data/videos/#{filename}.#{file_extension}", 'wb') do |f|
-    f.write open(url, read_timeout: @request_timeout).read
-  end
+  file_extension = get_file_extension(request_url_filename)
+  write_file("data/videos/#{filename}.#{file_extension}")
 end
 
 def extract_filename(photo_url)
@@ -94,7 +99,7 @@ end
 def process_video(post)
   video_url = ''
   if post['video_url'].nil?
-    video_url = post['permalink_url']
+    puts "TODO: download this externally hosted video #{post['permalink_url']}"
   else
     video_url = post['video_url']
     if @downloads_enabled
